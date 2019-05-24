@@ -4,9 +4,10 @@
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <script type="module">
       import { h, app } from "https://unpkg.com/hyperapp@2.0.0-beta.12/src/index.js?module"
+      import initialState from "./state.js"
 
       app({
-        init: () => 0,
+        init: () => initialState,
         view: state =>
           h("div", {}, [
             h("h1", {}, state),
