@@ -1,5 +1,11 @@
 # Counter
 
+## version 3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-v3/index.html)
+
+- source code reorganized
+  - this is overdone
+  - experiments on browser modules support
+
 ## version 2 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-v2/index.html)
 
 - moving initial state to separate module (test support in browser)
