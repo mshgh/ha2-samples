@@ -1,5 +1,9 @@
 # Counter
 
+## version 4 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-v4/index.html)
+
+- parallel modules loading via async/await
+
 ## version 3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-v3/index.html)
 
 - source code reorganized
