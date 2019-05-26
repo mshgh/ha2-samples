@@ -19,7 +19,13 @@ const init = () => ({
   }
 })
 
+const updateAuthor = (state, value) => ({ ...state, author: { ...state.author, value } })
+
+const updateBook = (state, value) => ({ ...state, book: { ...state.book, value } })
+
 export default {
-  init
+  init,
+  updateAuthor,
+  updateBook
 }
 // https://openlibrary.org/search/authors.json?q=herbert&limit=1&mode=ebooks
