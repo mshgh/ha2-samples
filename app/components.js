@@ -1,16 +1,33 @@
 import { h } from './3pty/hyperapp.js'
 
-const oninput = (_, { updateValue, onRefresh }) => (state, e) => [ updateValue({ ...state, pending: true }, e.target.value), [ onRefresh, { seed: e.target.value } ] ]
-
 // --- Typeahead ---
+const typeaheadOninput = (_, { update, buildUrl, buildSuggestions, onError }) => (state, e) => {
+  const newState = update(state, { pending: true, value: e.target.value })
+  const apiCall = dispatch => {
+    fetch(buildUrl(newState))
+    .then(response => {
+      if (!response.ok) throw new Error('HTTP error, status = ' + response.status);
+      return response.json();
+    })
+    .then(json => dispatch(update, { pending: false, suggestions: buildSuggestions(json) }))
+    .catch(reason => {
+      dispatch(update, { pending: false })
+      if (typeof onError === 'function') dispatch(onError, { message: reason.message, stack: reason.stack })
+    })
+  }
+  
+  return [ newState, [ apiCall ] ]
+}
+
 const TypeaheadSuggestion = ({ id, displayText }) => h('li', { id }, displayText)
-const TypeaheadSuggestions = ({ suggestions }) => h('ul', null, suggestions.map(suggestion => h(TypeaheadSuggestion, { ...suggestion })))
-export const Typeahead = ({ label, value, suggestions = [], updateValue, onRefresh }) =>
+const TypeaheadSuggestions = ({ suggestions = [] }) => h('ul', null, suggestions.map(suggestion => h(TypeaheadSuggestion, { ...suggestion })))
+export const Typeahead = ({ label, value, suggestions, update, buildUrl, buildSuggestions, onError }) =>
   [
     h('h4', null, label),
-    h('input', { type: 'text', value, oninput: [ oninput, { updateValue, onRefresh } ] }),
+    h('input', { type: 'text', value, oninput: [ typeaheadOninput, { update, buildUrl, buildSuggestions, onError } ] }),
     h(TypeaheadSuggestions, { suggestions })
   ]
+// --- Typeahead ---
 
 // --- ShowState ---
 export const ShowState = state =>
@@ -18,3 +35,4 @@ export const ShowState = state =>
     h('h3', { style: { margin: '0.2em', 'border-bottom': 'black 1px solid' } }, 'State'),
     h('pre', { style: { margin: '0.2em' } }, JSON.stringify(state, null, 2))
   ])
+// --- ShowState ---

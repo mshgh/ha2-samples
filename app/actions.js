@@ -1,5 +1,6 @@
 const init = () => ({
-  pending: false,
+  showState: true,
+  error: null,
   author: {
     value: 'a',
     limit: 10,
@@ -20,24 +21,27 @@ const init = () => ({
   }
 })
 
-const updateAuthor = (state, value) => ({ ...state, author: { ...state.author, value } })
+const onError = (state, err) => ({ ...state, error: { ...err } })
 
-const updateBook = (state, value) => ({ ...state, book: { ...state.book, value } })
+const authorUpdate = (state, author) => ({ ...state, author: { ...state.author, ...author } })
+const authorBuildUrl = ({ author: { value, limit }}) => `https://openlibrary.org/search/authors.json?q=${value}&limit=${limit}`
+const authorBuildSuggestions = json => json.docs.map(doc => ({ id: doc.key, displayText: doc.name }))
 
-const setAuthors = (state, suggestions) => ({ ...state, pending: false, author: { ...state.author, suggestions } })
-
-const setBooks = (state, suggestions) => ({ ...state, pending: false, book: { ...state.book, suggestions } })
-
-const setError = (state, error) => ({ ...state, pending: false, error })
-
-const setPending = (state, status) => ({ ...state, pending: status })
+const bookUpdate = (state, book) => ({ ...state, book: { ...state.book, ...book } })
+const bookBuildUrl = ({ book: { value, limit }}) => `https://openlibrary.org/search.json?title=${value}&limit=${limit}`
+const bookBuildSuggestions = json => json.docs.map(doc => ({ id: doc.key, displayText: doc.title }))
 
 export default {
   init,
-  updateAuthor,
-  updateBook,
-  setAuthors,
-  setBooks,
-  setError,
-  setPending,
+  onError,
+  author: {
+    update: authorUpdate,
+    buildUrl: authorBuildUrl,
+    buildSuggestions: authorBuildSuggestions,
+  },
+  book: {
+    update: bookUpdate,
+    buildUrl: bookBuildUrl,
+    buildSuggestions: bookBuildSuggestions,
+  },
 }
