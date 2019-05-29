@@ -1,10 +1,11 @@
 const init = () => ({
+  pending: false,
   author: {
     value: 'a',
     limit: 10,
     suggestions: [
       { id: 1, displayText: 'Frank Herbert' },
-      { id: 2, displayText: 'Dan Simmmons' },
+      { id: 2, displayText: 'Dan Simmons' },
       { id: 3, displayText: 'Terry Pratchett' }
     ]
   },
@@ -23,9 +24,20 @@ const updateAuthor = (state, value) => ({ ...state, author: { ...state.author, v
 
 const updateBook = (state, value) => ({ ...state, book: { ...state.book, value } })
 
+const setAuthors = (state, suggestions) => ({ ...state, pending: false, author: { ...state.author, suggestions } })
+
+const setBooks = (state, suggestions) => ({ ...state, pending: false, book: { ...state.book, suggestions } })
+
+const setError = (state, error) => ({ ...state, pending: false, error })
+
+const setPending = (state, status) => ({ ...state, pending: status })
+
 export default {
   init,
   updateAuthor,
-  updateBook
+  updateBook,
+  setAuthors,
+  setBooks,
+  setError,
+  setPending,
 }
-// https://openlibrary.org/search/authors.json?q=herbert&limit=1&mode=ebooks
