@@ -1,4 +1,4 @@
-import { h } from './3pty/hyperapp.js'
+import { h } from 'https://unpkg.com/hyperapp@2.0.0-beta.12/src/index.js?module'
 
 // --- Typeahead ---
 const typeaheadOninput = (_, { update, buildUrl, buildSuggestions, onError }) => (state, e) => {

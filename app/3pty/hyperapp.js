@@ -1,1 +1,0 @@
-export * from 'https://unpkg.com/hyperapp@2.0.0-beta.12/src/index.js?module'
