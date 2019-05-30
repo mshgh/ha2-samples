@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="dns-prefetch" href="https://unpkg.com">
     <link rel='modulepreload' href='https://unpkg.com/hyperapp@2.0.0-beta.12/src/index.js?module'>
+    <link rel='modulepreload' href='./lib/components.js'>
     <link rel='modulepreload' href='./app/components.js'>
     <link rel='modulepreload' href='./app/actions.js'>
-    <link rel='modulepreload' href='./app/views.js'>
+    <link rel='modulepreload' href='./app/index.js'>
     <link rel='icon' href='data:;base64,AAABAAEAICAQAAEABADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/rAAA/7AAAP6tHQD/tgAA/70bAP/FSgD/z10A/9d/AP3bigD/35MA/+muAP/wzAD989oA//z3APz//gAAAAAA7u7u7u7u7u7u7e7u7u7u7u7u7u7u3e3t7e7u7u7u7u7u7u7t7amHl5eX3u7u7u7u7u7u3sMAEREREp7u7u7u7u7u7u4RERERERFO7u7u7u7u7u7ZERERERERLO7u7u7u7u7u1xERERERERfu7t7u7u7u7ucREREiIiIh3d3u7u7u7u7cAREH7u7u7kAgAN3u3d3d7kEREt3d3d2RERCu7qq6q+6RERF6qqqqoBERXe5SIRDe4BERERERERERES3uoRESnuUREREREREREREH7uEREV3qERERERERERERFO7mEREM7hEREREREREhERG96wERJ+5gAAAAAAAAARERfu4RERPe3d3d3d3d3eQRER3ucREQvd7e3t7e3t7XEREL7sAREWy8vLy8vLy8uwERFu7kERERERERERERERIRERPu6RERERERERERERERERER7u0BERERERERERERERERFe7uUREREiIiIiIiIiIhEQvu7qEREiIiIiIiIiIiIiO97u7iERE8u7u7u7u7u7vO7u7u1iERHO7u7u7u7u7u7u7u7usBERfu7u7u7u7u7u7u7u7uMRER7u7u7u7u7u7u7u7u7nEREL7u7u7u7u7u7u7u7u7GZmae7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=='>
   </head>
   <body>
     <div id="app"></div>
     <script type='module' async>
         import { app } from 'https://unpkg.com/hyperapp@2.0.0-beta.12/src/index.js?module'
-        import views from './app/views.js'
-        import actions from './app/actions.js'
+        import { init, view } from './app/index.js'
   
-        app({
-          init: actions.init,
-          view: views.App,
-          node: document.getElementById('app')
-        })
+        app({ init, view, node: document.getElementById('app') })
       </script>
     </body>
 </html>
