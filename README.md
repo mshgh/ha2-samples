@@ -1,5 +1,9 @@
 # Typeahead
 
+## version 3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/typeahead-v3/index.html)
+
+- suggestions are now stored in local state of tyeahead's instance
+
 ## version 2 [see](https://rawcdn.githack.com/mshgh/ha2-samples/typeahead-v2/index.html)
 
 - using lenses to make typeahead component better reusable

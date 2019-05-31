@@ -1,13 +1,13 @@
-import { Typeahead, ShowState } from '../lib/components.js'
+import { Typeahead } from '../lib/components.js'
 import actions from './actions.js'
 
-const AuthorTypeahead = Typeahead({
-  statePath: 'rooot.author',
-  buildUrl: ({ value, limit }) => `https://openlibrary.org/search/authors.json?q=${value}&limit=${limit}`,
-  buildSuggestions: json => json.docs.map(doc => ({ id: doc.key, displayText: doc.name })),
+const AuthorTypeahead = Typeahead('rooot.author', {
+  buildUrl: ({ slice: { value, limit } }) => `https://openlibrary.org/search/authors.json?q=${value}&limit=${limit}`,
+  buildItems: json => json.docs.map(doc => ({ id: doc.key, displayText: doc.name })),
   onError: actions.onError,
   init: {
     value: 'a',
+    fooo: 'aa', // unexpected values are ignored
     limit: 10,
     suggestions: [
       { id: 1, displayText: 'Frank Herbert' },
@@ -17,11 +17,10 @@ const AuthorTypeahead = Typeahead({
   }
 })
 
-const BookTypeahead = Typeahead({
-  statePath: 'rooot.book',
-  buildUrl: ({ value, limit }) => `https://openlibrary.org/search.json?title=${value}&limit=${limit}`,
-  buildSuggestions: json => json.docs.map(doc => ({ id: doc.key, displayText: doc.title })),
-  onError: actions.onError,
+const BookTypeahead = Typeahead('rooot.book', {
+  buildUrl: ({ slice: { value, limit } }) => `https://openlibrary.org/search.json?title=${value}&limit=${limit}`,
+  buildItems: json => json.docs.map(doc => ({ id: doc.key, displayText: doc.title })),
+  //onError: actions.onError, // optional handler
   init: {
     value: 'e',
     limit: 10,
@@ -36,5 +35,4 @@ const BookTypeahead = Typeahead({
 export {
   AuthorTypeahead,
   BookTypeahead,
-  ShowState,
 }
