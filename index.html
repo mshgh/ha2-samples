@@ -1,12 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="icon" href="data:;base64,AAABAAEAICAQAAEABADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/rAAA/7AAAP6tHQD/tgAA/70bAP/FSgD/z10A/9d/AP3bigD/35MA/+muAP/wzAD989oA//z3APz//gAAAAAA7u7u7u7u7u7u7e7u7u7u7u7u7u7u3e3t7e7u7u7u7u7u7u7t7amHl5eX3u7u7u7u7u7u3sMAEREREp7u7u7u7u7u7u4RERERERFO7u7u7u7u7u7ZERERERERLO7u7u7u7u7u1xERERERERfu7t7u7u7u7ucREREiIiIh3d3u7u7u7u7cAREH7u7u7kAgAN3u3d3d7kEREt3d3d2RERCu7qq6q+6RERF6qqqqoBERXe5SIRDe4BERERERERERES3uoRESnuUREREREREREREH7uEREV3qERERERERERERFO7mEREM7hEREREREREhERG96wERJ+5gAAAAAAAAARERfu4RERPe3d3d3d3d3eQRER3ucREQvd7e3t7e3t7XEREL7sAREWy8vLy8vLy8uwERFu7kERERERERERERERIRERPu6RERERERERERERERERER7u0BERERERERERERERERFe7uUREREiIiIiIiIiIhEQvu7qEREiIiIiIiIiIiIiO97u7iERE8u7u7u7u7u7vO7u7u1iERHO7u7u7u7u7u7u7u7usBERfu7u7u7u7u7u7u7u7uMRER7u7u7u7u7u7u7u7u7nEREL7u7u7u7u7u7u7u7u7GZmae7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==">
-    <script type="module">
-      import { h, app } from "https://unpkg.com/hyperapp@2.0.3/src/index.js"
-    </script>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+
+<head>
+  <link rel="icon" href="data:;base64,AAABAAEAICAQAAEABADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/rAAA/7AAAP6tHQD/tgAA/70bAP/FSgD/z10A/9d/AP3bigD/35MA/+muAP/wzAD989oA//z3APz//gAAAAAA7u7u7u7u7u7u7e7u7u7u7u7u7u7u3e3t7e7u7u7u7u7u7u7t7amHl5eX3u7u7u7u7u7u3sMAEREREp7u7u7u7u7u7u4RERERERFO7u7u7u7u7u7ZERERERERLO7u7u7u7u7u1xERERERERfu7t7u7u7u7ucREREiIiIh3d3u7u7u7u7cAREH7u7u7kAgAN3u3d3d7kEREt3d3d2RERCu7qq6q+6RERF6qqqqoBERXe5SIRDe4BERERERERERES3uoRESnuUREREREREREREH7uEREV3qERERERERERERFO7mEREM7hEREREREREhERG96wERJ+5gAAAAAAAAARERfu4RERPe3d3d3d3d3eQRER3ucREQvd7e3t7e3t7XEREL7sAREWy8vLy8vLy8uwERFu7kERERERERERERERIRERPu6RERERERERERERERERER7u0BERERERERERERERERFe7uUREREiIiIiIiIiIhEQvu7qEREiIiIiIiIiIiIiO97u7iERE8u7u7u7u7u7vO7u7u1iERHO7u7u7u7u7u7u7u7usBERfu7u7u7u7u7u7u7u7uMRER7u7u7u7u7u7u7u7u7nEREL7u7u7u7u7u7u7u7u7GZmae7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==">
+  <script type="module">
+    import { h, app } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
+    import map from 'https://unpkg.com/hyperapp-map@1.1.0/src/index.js'
+
+    const Counter = (() => {
+
+      const init = 0
+      const increment = x => x + 1
+      const decrement = x => x - 1
+      const view = state =>
+        h('p', {}, [
+          h('button', { onclick: decrement}, ' - '),
+          state,
+          h('button', { onclick: increment}, ' + ')
+        ])
+
+      return { init, view }
+    })()
+
+    const CheckEqual = state => ({
+      ...state,
+      timesEqual: state.timesEqual + (state.A === state.B ? 1 : 0)
+    })
+
+    const mapA = map(
+      state => state.A,
+      (state, A) => CheckEqual({ ...state, A }),
+    )
+
+    const mapB = map(
+      state => state.B,
+      (state, B) => CheckEqual({ ...state, B }),
+    )
+
+    app({
+      init: {
+        A: Counter.init,
+        B: Counter.init,
+        timesEqual: 0
+      },
+      view: state =>
+        h('body', {}, [
+          mapA(Counter.view(state.A)),
+          mapB(Counter.view(state.B)),
+          h('p', {}, `Times equal: ${state.timesEqual}`)
+        ]),
+      node: document.body
+    })
+  </script>
+</head>
+
+<body />
+
 </html>
