@@ -1,9 +1,10 @@
 import { h, app } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
-import { ShowState } from './components/show-state.js'
+import mapModule from './map-module.js'
 import Counter from './modules/counter/index.js'
+import { ShowState } from './components/show-state.js'
 
-const CounterA = Counter('A')
-const CounterB = Counter('B')
+const CounterA = mapModule(Counter, state => state.A, (state, A) => ({ ...state, A }))
+const CounterB = mapModule(Counter, state => state.B, (state, B) => ({ ...state, B }))
 
 app({
   init: {
@@ -11,16 +12,18 @@ app({
     ...CounterB.init(3),
   },
   view: state => {
-    const { IncDecViewA } = CounterA.views(state)
-    const { IncDecViewB } = CounterB.views(state)
+    const viewsCounterA = CounterA.views(state)
+    const viewsCounterB = CounterB.views(state)
 
     return h('body', {}, [
-      h(IncDecViewA),
-      h(IncDecViewB),
-      h('p', {}, [
-        h(CounterA.ShowStats, { label: '#1' }),
-        h(CounterB.ShowStats, { label: '#2' })
-      ]),
+      h(viewsCounterA.IncDec, { title: 'Counter A', incrementOther: CounterB.increment, decrementOther: CounterB.decrement }),
+      h(viewsCounterB.IncDec, { title: 'Counter B', incrementOther: CounterA.increment, decrementOther: CounterA.decrement }),
+      h('hr'),
+      h('div', {}, "Controlling 'Counter A' from outside"),
+      h('button', { onClick: CounterA.decrement }, 'Decrement A'),
+      ' ',
+      h('button', { onClick: CounterA.increment }, 'Increment A'),
+      h('hr'),
       h(ShowState, { state, indent: 3 })
     ])
   },
