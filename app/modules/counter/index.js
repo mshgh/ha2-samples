@@ -1,5 +1,5 @@
 import module from '../../module.js'
-import actions from './counter-actions.js'
+import * as actions from './counter-actions.js'
 import { IncDec } from './counter-views.js'
 
 export default (slice, { name, count = 0 }, parent) => {
