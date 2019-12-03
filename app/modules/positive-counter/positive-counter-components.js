@@ -1,10 +1,14 @@
 import { h } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
+import { BorderedModule } from '../../components/module-helpers.js'
 
-const moduleBorder = { border: '1px solid black', width: 'fit-content', padding: '4px', margin: '6px' }
-const underlineHeader = { 'border-bottom': '1px solid black', 'margin-bottom': '4px' }
+const CounterName = name => name && h('div', {}, 'Name: ', name)
+const BulletedList = (...items) => items.length > 0 && h('ul', {}, items.map(i => h('li', {}, i)))
+const Checkbox = (label, checked, onclick) => [label, h('input', { type: 'checkbox', checked, onclick })]
 
-export const Settings = ({ name, checked, toggle }) => h('div', { style: moduleBorder }, [
-  name && h('div', {}, h('div', { style: underlineHeader }, 'Module: Counter (Settings)'), ['Name: ', name]),
-  '* Allow negative values: ',
-  h('input', { type: 'checkbox', checked, onclick: toggle }),
-])
+export const Settings = ({ name, checked: allowNegative, toggle }) =>
+  BorderedModule('Counter (Settings)',
+    CounterName(name),
+    BulletedList(
+      Checkbox('Allow negative values: ', allowNegative, toggle),
+    ),
+  )
