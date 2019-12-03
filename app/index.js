@@ -1,27 +1,29 @@
 import { h, app } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
 import { ShowState } from './components/show-state.js'
 import Counter from './modules/counter/index.js'
+import PositiveCounter from './modules/positive-counter/index.js'
 
-const CounterA = Counter('A', { name: 'A' })
-const CounterB = Counter('B', { name: 'B', count: 3 })
+const counterA = Counter('A', { name: 'A' })
+const counterB = Counter('B', { name: 'B', count: 3 })
+const counterC = PositiveCounter('C', { name: 'C', count: 5, positive: true })
 
 app({
   init: {
-    ...CounterA.init,
-    ...CounterB.init,
+    ...counterA.init,
+    ...counterB.init,
+    ...counterC.init,
   },
   view: state => {
-    const viewsCounterA = CounterA.views(state)
-    const viewsCounterB = CounterB.views(state)
+    const viewsCounterA = counterA.views(state)
+    const viewsCounterB = counterB.views(state)
+    const viewsCounterC = counterC.views(state)
 
     return h('body', {}, [
-      h(viewsCounterA.IncDec, { title: 'Counter A', incrementOther: CounterB.actions.increment, decrementOther: CounterB.actions.decrement }),
-      h(viewsCounterB.IncDec, { title: 'Counter B', incrementOther: CounterA.actions.increment, decrementOther: CounterA.actions.decrement }),
+      h(viewsCounterA.IncDec, { title: 'Counter A', incrementOther: counterB.actions.increment, decrementOther: counterB.actions.decrement }),
+      h(viewsCounterB.IncDec, { title: 'Counter B', incrementOther: counterC.actions.increment, decrementOther: counterC.actions.decrement }),
+      h(viewsCounterC.IncDec, { title: 'Counter C', incrementOther: counterA.actions.increment, decrementOther: counterA.actions.decrement }),
       h('hr'),
-      h('div', {}, "Controlling 'Counter A' from outside"),
-      h('button', { onClick: CounterA.actions.decrement }, 'Decrement A'),
-      ' ',
-      h('button', { onClick: CounterA.actions.increment }, 'Increment A'),
+      h(viewsCounterC.Settings),
       h('hr'),
       h(ShowState, { state, indent: 3 })
     ])

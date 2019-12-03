@@ -5,10 +5,10 @@ const underlineHeader = { 'border-bottom': '1px solid black', 'margin-bottom': '
 
 export const IncDec = ({ name, count, increment, decrement, incrementOther, decrementOther }) =>
   h('div', { style: moduleBorder }, [
-    h('div', {}, [h('div', { style: underlineHeader }, 'Module'), name && ['Counter ', name]]),
+    h('div', {}, [h('div', { style: underlineHeader }, 'Module: Counter'), name && ['Name: ', name]]),
     decrementOther && ['[', h('button', { onClick: decrementOther }, '(other) - '), '] '],
     h('button', { onclick: decrement }, ' - '),
-    '' + count,
+    ' ' + count + ' ',
     h('button', { onclick: increment }, ' + '),
     incrementOther && [' [', h('button', { onClick: incrementOther }, ' + (other)'), ']'],
   ])
