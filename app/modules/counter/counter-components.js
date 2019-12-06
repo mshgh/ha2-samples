@@ -12,5 +12,5 @@ export const IncDec = ({ name, count, increment, decrement, incrementOther, decr
     Button(' - ', decrement),
     ShowCount(count),
     Button(' + ', increment),
-    incrementOther && [' [', Button(' + (other)', incrementOther), ']'],
+    incrementOther && [' [', Button(' + (other)', incrementOther), ']']
   )

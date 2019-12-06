@@ -1,6 +1,10 @@
 # Counter
 as a module based on https://github.com/zaceno/hyperapp-map approach
 
+## version 4 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v4/index.html)
+
+-  complete rewrite of modules implementation
+
 ## version 3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v3/index.html)
 
 -  added PositiveCounter

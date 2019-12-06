@@ -1,18 +1,47 @@
 import map from 'https://unpkg.com/hyperapp-map@1.1.0/src/index.js'
 
-const module = (slice, intercept, parent) => {
+function mapActions(mapAction, actions) {
+  return Object.keys(actions).reduce(function reduceActions(acc, k) {
+    acc[k] = mapAction(actions[k])
+    return acc
+  }, {})
+}
 
-  const extract = state => state[slice]
-  const merge = !intercept ? ((state, sub) => ({ ...state, [slice]: sub })) : ((state, sub) => ({ ...state, [slice]: intercept(sub) }))
-  const mapAction = !parent ? map(extract, merge) : op => parent(map(extract, merge)(op))
-  const mapObject = actions => Object.keys(actions).reduce((acc, key) => { acc[key] = mapAction(actions[key]); return acc }, {})
-
+function extractAndMerge(slice, intercept) {
   return {
-    init: (init = {}) => merge({}, init),
-    actions: (...args) => args.map(action => typeof action === 'function' ? mapAction(action) : mapObject(action)),
-    views: views => state => views(extract(state)),
-    module: (slice, intercept) => module(slice, intercept, mapAction),
+    extract: function extract(state) {
+      return state[slice]
+    },
+    merge: !intercept
+      ? function merge(state, sub) {
+        return { ...state, [slice]: sub }
+      }
+      : function merge(state, sub) {
+        return { ...state, [slice]: intercept(sub) }
+      }
   }
 }
 
-export default (slice, parent, intercept) => !parent ? module(slice, intercept) : parent.module(slice, intercept)
+function mapSlice(slice, intercept, parent, init = {}, { extract, merge } = extractAndMerge(slice, intercept)) {
+  return {
+    init: function mapInit(state) {
+      init[slice] = state
+      return init
+    },
+    extract: !parent ? extract : state => extract(parent.extract(state)),
+    mapAction: !parent ? map(extract, merge) : op => parent.mapAction(map(extract, merge)(op))
+  }
+}
+
+function mapModule(data, sliceMap, init = sliceMap.init(data.init), actions = mapActions(sliceMap.mapAction, data.actions)) {
+  return [
+    {
+      init,
+      actions,
+      views: state => data.views(sliceMap.extract(state), actions)
+    },
+    slice => data => mapModule(data, mapSlice(slice, data.intercept, sliceMap, sliceMap.extract(init)))
+  ]
+}
+
+export default (module, data) => typeof module === 'string' ? mapModule(data, mapSlice(module, data.intercept)) : module(data)

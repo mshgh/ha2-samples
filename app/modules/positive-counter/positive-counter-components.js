@@ -9,6 +9,6 @@ export const Settings = ({ name, checked: allowNegative, toggle }) =>
   BorderedModule('Counter (Settings)',
     CounterName(name),
     BulletedList(
-      Checkbox('Allow negative values: ', allowNegative, toggle),
-    ),
+      Checkbox('Allow negative values: ', allowNegative, toggle)
+    )
   )
