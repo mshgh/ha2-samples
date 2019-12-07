@@ -4,4 +4,6 @@ const BorderedPanel = (...content) => h('div', { style: { border: '1px solid bla
 
 const ModuleHeader = name => h('div', { style: { 'border-bottom': '1px solid black', 'margin-bottom': '4px' } }, 'Module: ', '' + name)
 
-export const BorderedModule = (name, ...content) => BorderedPanel(ModuleHeader(name), ...content)
+const CounterName = name => name && h('div', {}, 'Name: ', name)
+
+export const BorderedModule = (module, name, ...content) => BorderedPanel(ModuleHeader(module), CounterName(name), ...content)

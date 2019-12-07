@@ -5,7 +5,7 @@ import Counter from '../counter/index.js'
 
 const counter = (child, name, count) => Counter(child('counter'), { name: name && (name + ' (positive)'), count })
 
-export default (slice, { name, count = 0, positive = false }) => (([{ init, views }, child], { actions, views: counterViews } = counter(child, name, count)) => ({
+export default (slice, { name, count = 0, positive = false } = {}) => (([{ init, views }, child], { actions, views: counterViews } = counter(child, name, count)) => ({
   init,
   actions,
   views: state => ({
@@ -24,7 +24,7 @@ export default (slice, { name, count = 0, positive = false }) => (([{ init, view
 /*
  * this is identical code as the one above only not so condensed to be easy understand
  *
-export default (slice, { name, count = 0, positive = false }) => {
+export default (slice, { name, count = 0, positive = false } = {}) => {
 
   const [positiveCounter, child] = module(slice, {
     init: { positive },

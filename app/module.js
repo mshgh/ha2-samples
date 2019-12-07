@@ -1,7 +1,7 @@
 import map from 'https://unpkg.com/hyperapp-map@1.1.0/src/index.js'
 
 function mapActions(mapAction, actions) {
-  return Object.keys(actions).reduce(function reduceActions(acc, k) {
+  return actions && Object.keys(actions).reduce(function reduceActions(acc, k) {
     acc[k] = mapAction(actions[k])
     return acc
   }, {})
@@ -22,26 +22,28 @@ function extractAndMerge(slice, intercept) {
   }
 }
 
-function mapSlice(slice, intercept, parent, init = {}, { extract, merge } = extractAndMerge(slice, intercept)) {
+function mapSlice(slice, intercept, parent) {
+  const { extract, merge } = extractAndMerge(slice, intercept)
+  
   return {
-    init: function mapInit(state) {
-      init[slice] = state
-      return init
-    },
+    init: (init, state = {}) => (!parent ? init : parent.extract(init))[slice] = state,
     extract: !parent ? extract : state => extract(parent.extract(state)),
     mapAction: !parent ? map(extract, merge) : op => parent.mapAction(map(extract, merge)(op))
   }
 }
 
-function mapModule(data, sliceMap, init = sliceMap.init(data.init), actions = mapActions(sliceMap.mapAction, data.actions)) {
+function mapModule(init, data, sliceMap) {
+  const actions = mapActions(sliceMap.mapAction, data.actions)
+
+  sliceMap.init(init, data.init)
   return [
     {
       init,
       actions,
       views: state => data.views(sliceMap.extract(state), actions)
     },
-    slice => data => mapModule(data, mapSlice(slice, data.intercept, sliceMap, sliceMap.extract(init)))
+    slice => data => mapModule(init, data, mapSlice(slice, data.intercept, sliceMap))
   ]
 }
 
-export default (module, data) => typeof module === 'string' ? mapModule(data, mapSlice(module, data.intercept)) : module(data)
+export default (module, data = {}) => typeof module === 'string' ? mapModule({}, data, mapSlice(module, data.intercept)) : module(data)
