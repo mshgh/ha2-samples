@@ -1,4 +1,4 @@
-import module from '../../module.js'
+import { module } from '../../modules.js'
 import * as actions from './positive-counter-actions.js'
 import { Settings } from './positive-counter-components.js'
 import Counter from '../counter/index.js'

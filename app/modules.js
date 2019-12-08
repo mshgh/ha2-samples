@@ -24,7 +24,7 @@ function extractAndMerge(slice, intercept) {
 
 function mapSlice(slice, intercept, parent) {
   const { extract, merge } = extractAndMerge(slice, intercept)
-  
+
   return {
     init: (init, state = {}) => (!parent ? init : parent.extract(init))[slice] = state,
     extract: !parent ? extract : state => extract(parent.extract(state)),
@@ -38,7 +38,6 @@ function mapModule(init, data, sliceMap) {
   sliceMap.init(init, data.init)
   return [
     {
-      init,
       actions,
       views: state => data.views(sliceMap.extract(state), actions)
     },
@@ -46,4 +45,17 @@ function mapModule(init, data, sliceMap) {
   ]
 }
 
-export default (module, data = {}) => typeof module === 'string' ? mapModule({}, data, mapSlice(module, data.intercept)) : module(data)
+export const init = {}
+
+export function module(module, data = {}) {
+  return typeof module !== 'string' ? module(data)
+    : mapModule(init, data, mapSlice(module, data.intercept))
+}
+
+export function ns(slice) {
+  const child = module(slice)[1]
+
+  return {
+    add: (Module, slice, props) => Module(child(slice), props)
+  }
+}

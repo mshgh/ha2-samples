@@ -1,4 +1,4 @@
-import module from '../../module.js'
+import { module } from '../../modules.js'
 import * as actions from './counter-actions.js'
 import { IncDec } from './counter-components.js'
 
