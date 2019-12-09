@@ -1,4 +1,4 @@
-import { ns } from './modules.js'
+import { ns } from '../lib/modules.js'
 import Counter from './modules/counter/index.js'
 import PositiveCounter from './modules/positive-counter/index.js'
 

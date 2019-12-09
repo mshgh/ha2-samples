@@ -1,5 +1,5 @@
 import { app } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
-import { init } from './modules.js'
+import { init } from '../lib/modules.js'
 import { Page } from './app-components.js'
 import { modules } from './app-modules.js'
 
