@@ -1,5 +1,5 @@
 import { h } from 'https://unpkg.com/hyperapp@2.0.3/src/index.js'
-import { BorderedModule } from '../../components/module-helpers.js'
+import { BorderedModule } from '../../components/helpers.js'
 
 const Button = (label, onclick) => h('button', { onclick }, label)
 const ShowCount = count => h('span', { style: { 'width': '2.5em', 'text-align': 'center', 'display': 'inline-block' } }, count)
