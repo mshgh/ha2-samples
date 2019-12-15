@@ -7,5 +7,5 @@ const showFunctions = (_, value) => typeof value === 'function' ? functionPlaceh
 
 export const ShowState = ({ state, indent = 2 }) => h('pre', {}, h('code', { style: { 'border-bottom': '1px solid black' } }, [
   h('span', { style: { cursor: 'pointer' }, onclick: showState }, `${state.showState ? 'Hide' : 'Show'} State`),
-  state.showState && h('div', {}, JSON.stringify(state, showFunctions, indent).replace(`: "${functionPlaceholder}"`, ': function () => {...}'))
+  state.showState && h('div', {}, JSON.stringify(state, showFunctions, indent).split(`: "${functionPlaceholder}"`).join(': function () => {...}'), )
 ]))
