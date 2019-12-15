@@ -28,7 +28,8 @@ const navigation = Navigation('nav', {
   ]
 })
 
-export default navigation.View({
+export { init } from '../lib/modules.js'
+export const view = navigation.View({
   navigateToCounters: navigation.navigateTo('nav.counters'),
   navigateToSettings: navigation.navigateTo('nav.settings'),
 })
