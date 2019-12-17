@@ -1,11 +1,17 @@
 # Counter
 as a module based on https://github.com/zaceno/hyperapp-map approach
 
-## [WIP] version 6 [see](https://rawcdn.githack.com/mshgh/ha2-samples/41fb843359c8e9e21c32e56e356913d09402523b/index.html)
+## version 6 [WIP]
 
-- cleaner way how to handle initial state for modules
-  - every module returns its initial state including inital states of all nested modules
-  - there is no top level `init` shared by all modules; consumer of modules is responsible for building of the initial state
+- version 6pre1 [see](https://rawcdn.githack.com/mshgh/ha2-samples/41fb843359c8e9e21c32e56e356913d09402523b/index.html)
+  - cleaner way how to handle initial state for modules
+    - every module returns its initial state including inital states of all nested modules
+    - there is no top level `init` shared by all modules; consumer of modules is responsible for building of the initial state
+- version 6pre2 [see](https://rawcdn.githack.com/mshgh/ha2-samples/41fb843359c8e9e21c32e56e356913d09402523b/index.html)
+  - initial support for dynamically added modules
+    - **MultiCounter** module added with `add()` function implemented
+    - `add()` is called during application start to simulate dynamic behaviour
+    - added counters are present in **Counters** a **Settings** pages, but not working (actions not supported yet)
 
 ## version 5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v5/index.html)
 
