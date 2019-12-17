@@ -1,11 +1,11 @@
 # Counter
 as a module based on https://github.com/zaceno/hyperapp-map approach
 
-## version 6 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v6/index.html)
+## [WIP] version 6 [see](https://rawcdn.githack.com/mshgh/ha2-samples/41fb843359c8e9e21c32e56e356913d09402523b/index.html)
 
-- cleaner way to handle initial state for modules
+- cleaner way how to handle initial state for modules
   - every module returns its initial state including inital states of all nested modules
-  - all top level modules add their initial state into single global object which is exported as `init` from modules.js
+  - there is no top level `init` shared by all modules; consumer of modules is responsible for building of the initial state
 
 ## version 5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v5/index.html)
 
