@@ -2,7 +2,7 @@ import Navigation from './modules/navigation.js'
 import { Body, Div, Separator, AppTitle, ButtonLink } from './components/helpers.js'
 import { ShowState } from './components/show-state.js'
 import { WelcomeMessage, Counters, Settings } from './app-components.js'
-import { modules } from './app-modules.js'
+import { modules, init as modulesInit } from './app-modules.js'
 
 const actions = modules.map(m => m.actions)
 const views = modules.map(m => m.views)
@@ -28,8 +28,12 @@ const navigation = Navigation('nav', {
   ]
 })
 
-export { init } from '../lib/modules.js'
 export const view = navigation.View({
   navigateToCounters: navigation.navigateTo('nav.counters'),
   navigateToSettings: navigation.navigateTo('nav.settings'),
 })
+
+export const init = {
+  ...modulesInit,
+  ...navigation.init
+}
