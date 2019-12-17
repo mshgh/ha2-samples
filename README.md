@@ -7,7 +7,7 @@ as a module based on https://github.com/zaceno/hyperapp-map approach
   - cleaner way how to handle initial state for modules
     - every module returns its initial state including inital states of all nested modules
     - there is no top level `init` shared by all modules; consumer of modules is responsible for building of the initial state
-- version 6pre2 [see](https://rawcdn.githack.com/mshgh/ha2-samples/41fb843359c8e9e21c32e56e356913d09402523b/index.html)
+- version 6pre2 [see](https://rawcdn.githack.com/mshgh/ha2-samples/2b990cd6ef159433fa9117d1be3fc2603359f341/index.html)
   - initial support for dynamically added modules
     - **MultiCounter** module added with `add()` function implemented
     - `add()` is called during application start to simulate dynamic behaviour
