@@ -6,7 +6,7 @@ export default (slice, { name, count = 0 } = {}) => (([counter]) => counter)(mod
   init: count,
   actions,
   views: (count, { increment, decrement }) => ({
-    IncDec: ({ incrementOther, decrementOther }) => IncDec({ name, count, increment, decrement, incrementOther, decrementOther })
+    IncDec: ({ incrementOther, decrementOther } = {}) => IncDec({ name, count, increment, decrement, incrementOther, decrementOther })
   })
 }))
 
