@@ -2,25 +2,18 @@ import { module } from '../../../lib/modules.js'
 import * as actions from './counter-actions.js'
 import { IncDec } from './counter-components.js'
 
-export default (slice, { name, count = 0 } = {}) => (([counter]) => counter)(module(slice, {
-  init: count,
-  actions,
-  views: ({ slice, actions: { increment, decrement } }) => ({
-    IncDec: ({ incrementOther, decrementOther } = {}) => IncDec({ name, count: slice, increment, decrement, incrementOther, decrementOther })
-  })
-}))
-
-/*
- * this is identical code as the one above only not so condensed to be easy understand
- *
-export default (slice, { name, count = 0 } = {}) => {
+export default function Counter(slice, { name, count = 0 } = {}) {
 
   const [counter] = module(slice, {
     init: count,
     actions,
-    views: (count, { increment, decrement }) => ({
-      IncDec: ({ incrementOther, decrementOther }) => IncDec({ name, count, increment, decrement, incrementOther, decrementOther })
-    })
+    views({ slice, actions: { increment, decrement } }) {
+      return {
+        IncDec({ incrementOther, decrementOther } = {}) {
+          return IncDec({ name, count: slice, increment, decrement, incrementOther, decrementOther })
+        }
+      }
+    }
   })
 
   return {
@@ -29,4 +22,3 @@ export default (slice, { name, count = 0 } = {}) => {
     views: counter.views
   }
 }
-*/
