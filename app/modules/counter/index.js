@@ -5,8 +5,8 @@ import { IncDec } from './counter-components.js'
 export default (slice, { name, count = 0 } = {}) => (([counter]) => counter)(module(slice, {
   init: count,
   actions,
-  views: (count, { increment, decrement }) => ({
-    IncDec: ({ incrementOther, decrementOther } = {}) => IncDec({ name, count, increment, decrement, incrementOther, decrementOther })
+  views: ({ slice, actions: { increment, decrement } }) => ({
+    IncDec: ({ incrementOther, decrementOther } = {}) => IncDec({ name, count: slice, increment, decrement, incrementOther, decrementOther })
   })
 }))
 

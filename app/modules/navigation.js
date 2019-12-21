@@ -10,10 +10,10 @@ export default function Navigation(slice, { MasterPage, defaultPage, Menu = () =
       actions: {
         navigate: (state, pageName) => ({ ...state, pageName })
       },
-      views: ({ pageName }) => ({
-        View: (state, props) => MasterPage(state, {
+      views: ({ slice, state }) => ({
+        View: props => MasterPage(state, {
           Menu: Menu(state, { links: links.all }, props),
-          Page: links.map[pageName].Page(state, props)
+          Page: links.map[slice.pageName].Page(state, props)
         }, props)
       })
     }
@@ -33,6 +33,6 @@ export default function Navigation(slice, { MasterPage, defaultPage, Menu = () =
   return {
     init: navigation.init,
     navigateTo: name => links.map[name].navigate,
-    View: props => state => navigation.views(state).View(state, props)
+    View: props => state => navigation.views(state).View(props)
   }
 }

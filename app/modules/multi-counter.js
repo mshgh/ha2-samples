@@ -8,21 +8,22 @@ export default function MultiCounter(slice, { } = {}) {
   let seq = -1
 
   const [multiCounter, child] = module(slice, {
-    views(slice) {
-      return function (state) {
-
-        function positiveCounter(module) {
-          return slice[module.id].type === 'positiveCounter'
+    views({ slice, state }) {
+      return {
+        Counters() {
+          return views().map(v => v.IncDec())
+        },
+        Settings() {
+          return views(positiveCounter).map(v => v.Settings())
         }
+      }
 
-        function views(filter = _ => true) {
-          return counters.filter(filter).map(c => c.module.views(state))
-        }
+      function views(filter = _ => true) {
+        return counters.filter(filter).map(c => c.module.views(state))
+      }
 
-        return {
-          Counters() { return views().map(v => v.IncDec()) },
-          Settings() { return views(positiveCounter).map(v => v.Settings()) }
-        }
+      function positiveCounter(module) {
+        return slice[module.id].type === 'positiveCounter'
       }
     }
   })
@@ -42,7 +43,7 @@ export default function MultiCounter(slice, { } = {}) {
     init: multiCounter.init,
     actions: multiCounter.actions,
     views(state) {
-      return multiCounter.views(state)(state)
+      return multiCounter.views(state)
     },
     add
   }

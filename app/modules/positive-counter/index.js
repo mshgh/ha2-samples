@@ -15,8 +15,8 @@ export default (slice, { name, count = 0, positive = false } = {}) => (([{ init,
 }))(module(slice, {
   init: { positive },
   actions,
-  views: (state, { toggle }) => ({
-    Settings: () => Settings({ name, checked: !state.positive, toggle })
+  views: ({ slice, actions: { toggle } }) => ({
+    Settings: () => Settings({ name, checked: !slice.positive, toggle })
   }),
   intercept: state => !state.positive ? state : { ...state, counter: Math.max(0, state.counter) }
 }))
