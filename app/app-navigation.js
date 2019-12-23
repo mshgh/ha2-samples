@@ -1,8 +1,8 @@
 import Navigation from './modules/navigation.js'
 import { Body, Div, Separator, AppTitle, ButtonLink } from './components/helpers.js'
 import { ShowState } from './components/show-state.js'
-import { WelcomeMessage, Counters, Settings } from './app-components.js'
-import { modules, init as modulesInit } from './app-modules.js'
+import { WelcomeMessage, Counters, Settings, AddMoreForm } from './app-components.js'
+import { modules, indexes as module, init as modulesInit } from './app-modules.js'
 
 const actions = modules.map(m => m.actions)
 const views = modules.map(m => m.views)
@@ -10,13 +10,14 @@ const views = modules.map(m => m.views)
 const WelcomePage = (_, { navigateToCounters, navigateToSettings }) => WelcomeMessage({ navigateToCounters, navigateToSettings })
 const CountersPage = state => Counters({ actions, views: views.map(v => v(state)) })
 const SettingsPage = state => Settings(views.map(v => v(state)))
+const AddMorePage = state => AddMoreForm({ addCounter: state.addCounter, add: actions[module.multiCounter].add })
 
 const navigation = Navigation('nav', {
   MasterPage: (state, { Menu, Page }) => Body(
     Menu,
     AppTitle(state.title),
     Page,
-    Separator,
+    Separator(),
     ShowState({ state })
   ),
   defaultPage: 'nav.home',
@@ -24,7 +25,8 @@ const navigation = Navigation('nav', {
   menuItems: [
     { name: 'nav.home', label: 'Home page', Page: WelcomePage },
     { name: 'nav.counters', label: 'Counters', Page: CountersPage },
-    { name: 'nav.settings', label: 'Settings', Page: SettingsPage }
+    { name: 'nav.settings', label: 'Settings', Page: SettingsPage },
+    { name: 'nav.add-more', label: 'Add More', Page: AddMorePage }
   ]
 })
 

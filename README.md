@@ -12,6 +12,9 @@ as a module based on https://github.com/zaceno/hyperapp-map approach
     - **MultiCounter** module added with `add()` function implemented
     - `add()` is called during application start to simulate dynamic behaviour
     - added counters are present in **Counters** a **Settings** pages, but not working (actions not supported yet)
+- version 6pre3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/2b990cd6ef159433fa9117d1be3fc2603359f341/index.html)
+  - support to dynamically add counters implemented
+  - TODO: delete dynamically added counter(s)
 
 ## version 5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v5/index.html)
 

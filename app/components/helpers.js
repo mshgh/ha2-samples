@@ -4,11 +4,15 @@ export const Body = (...content) => h('body', { style: { 'font-family': 'sans-se
 
 export const Div = (...content) => h('div', {}, content)
 
-export const Separator = h('hr')
+export const Separator = () => h('hr')
 
 export const AppTitle = (title) => h('h2', {}, title)
 
+export const FormTitle = (title) => h('strong', {}, title)
+
 export const ButtonLink = (label, onclick) => h('button', { onclick }, label)
+
+export const ButtonLinkDisabled = label => h('button', { disabled: true }, label)
 
 export const TextLink = (label, onclick) => h('span', { style: { cursor: 'pointer', 'text-decoration': 'underline' }, onclick }, label)
 
@@ -19,3 +23,7 @@ const ModuleHeader = name => h('div', { style: { 'border-bottom': '1px solid bla
 const CounterName = name => name && h('div', {}, 'Name: ', name)
 
 export const BorderedModule = (module, name, ...content) => BorderedPanel(ModuleHeader(module), CounterName(name), ...content)
+
+export const InputText = (value, oninput) => h('input', { type: 'text', value, oninput })
+
+export const InputCheckbox = (checked, oninput) => h('input', { type: 'checkbox', checked, oninput })

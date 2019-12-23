@@ -4,6 +4,7 @@ import { init, view } from './app-navigation.js'
 app({
   init: {
     ...init,
+    addCounter: { name: '', count: 0, positive: false },
     title: 'Counter + PositiveCoutner + Namespace + Navigation'
   },
   view,

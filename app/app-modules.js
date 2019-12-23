@@ -22,10 +22,10 @@ addModule(Counter, 'd', { name: 'D', count: 7 }, counters)
 addModule(PositiveCounter, 'e', { name: 'E', count: 13, positive: true }, counters)
 addModule(MultiCounter, 'multiCounter')
 
-const multiCounter = all[5].module // hard-coded index for testing purposes only
-multiCounter.add({ name: 'First' })
-multiCounter.add({ name: 'Second', count: 5, positive: false })
-
 export const modules = all.map(m => m.module)
 export const indexes = all.reduce((acc, m, idx) => { acc[m.slice] = idx; return acc }, {})
 export const init = topLevel.reduce((acc, m) => ({ ...acc, ...m.init }), {})
+
+const multiCounter = modules[indexes.multiCounter]
+multiCounter.add({ name: 'First' })
+multiCounter.add({ name: 'Second', count: 5, positive: false })
