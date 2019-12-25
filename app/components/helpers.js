@@ -14,6 +14,8 @@ export const ButtonLink = (label, onclick) => h('button', { onclick }, label)
 
 export const ButtonLinkDisabled = label => h('button', { disabled: true }, label)
 
+export const ButtonDelete = (onclick) => h('button', { onclick, title: 'delete', style: { 'margin-top': '6px' } }, 'x')
+
 export const TextLink = (label, onclick) => h('span', { style: { cursor: 'pointer', 'text-decoration': 'underline' }, onclick }, label)
 
 const BorderedPanel = (...content) => h('div', { style: { border: '1px solid black', width: 'fit-content', padding: '4px', margin: '6px' } }, ...content)
@@ -27,3 +29,8 @@ export const BorderedModule = (module, name, ...content) => BorderedPanel(Module
 export const InputText = (value, oninput) => h('input', { type: 'text', value, oninput })
 
 export const InputCheckbox = (checked, oninput) => h('input', { type: 'checkbox', checked, oninput })
+
+export const FloatLeft = (content) => h('div', {}, [
+  ...content.map(c => h('div', { style: { float: 'left' } }, c)),
+  h('div', { style: { clear: 'both' } })
+])

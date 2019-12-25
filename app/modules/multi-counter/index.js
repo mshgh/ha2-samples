@@ -1,6 +1,7 @@
 import { module, ns } from '../../../lib/modules.js'
 import Counter from '../counter/index.js'
 import PositiveCounter from '../positive-counter/index.js'
+import { WithDeleteButton } from './multi-counter-components.js'
 
 export default function MultiCounter(slice, { } = {}) {
 
@@ -36,10 +37,14 @@ export default function MultiCounter(slice, { } = {}) {
     views({ slice, state }) {
       return {
         Counters() {
-          return views().map((v, idx) => v.IncDec({
-            incrementOther: counters[wrapIndex(idx + 1)].module.actions.increment,
-            decrementOther: counters[wrapIndex(idx + 1)].module.actions.decrement
-          }))
+          return views().map((v, idx) => WithDeleteButton(
+            {
+              Module: v.IncDec({
+                incrementOther: counters[wrapIndex(idx + 1)].module.actions.increment,
+                decrementOther: counters[wrapIndex(idx + 1)].module.actions.decrement
+              }),
+              onDelete: x => x // TODO: implement DeleteMe action
+            }))
         },
         Settings() {
           return views(positiveCounter).map(v => v.Settings())
