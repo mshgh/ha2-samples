@@ -1,7 +1,7 @@
 import { ns } from '../lib/modules.js'
 import Counter from './modules/counter/index.js'
 import PositiveCounter from './modules/positive-counter/index.js'
-import MultiCounter from './modules/multi-counter.js'
+import MultiCounter from './modules/multi-counter/index.js'
 
 function addModule(Module, slice, props, ns) {
 

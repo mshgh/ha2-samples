@@ -1,6 +1,6 @@
-import { module, ns } from '../../lib/modules.js'
-import Counter from './counter/index.js'
-import PositiveCounter from './positive-counter/index.js'
+import { module, ns } from '../../../lib/modules.js'
+import Counter from '../counter/index.js'
+import PositiveCounter from '../positive-counter/index.js'
 
 export default function MultiCounter(slice, { } = {}) {
 
