@@ -15,6 +15,8 @@ as a module based on https://github.com/zaceno/hyperapp-map approach
 - version 6pre3 [see](https://rawcdn.githack.com/mshgh/ha2-samples/f569841138a383b312dd50d8bfe1bd624cf049eb/index.html)
   - support to dynamically add counters implemented
   - TODO: delete dynamically added counter(s)
+- version 6pre4 [see](https://rawcdn.githack.com/mshgh/ha2-samples/f569841138a383b312dd50d8bfe1bd624cf049eb/index.html)
+  - support to delete dynamically added counters implemented
 
 ## version 5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v5/index.html)
 

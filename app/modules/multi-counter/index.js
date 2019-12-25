@@ -32,9 +32,14 @@ export default function MultiCounter(slice, { } = {}) {
           ...slice,
           ...addCounter(props)
         }
+      },
+      del(slice, idx) {
+        const { [counters[idx].id]: _, ...result } = slice
+        counters.splice(idx, 1)
+        return result
       }
     },
-    views({ slice, state }) {
+    views({ slice, actions: { del }, state }) {
       return {
         Counters() {
           return views().map((v, idx) => WithDeleteButton(
@@ -43,7 +48,7 @@ export default function MultiCounter(slice, { } = {}) {
                 incrementOther: counters[wrapIndex(idx + 1)].module.actions.increment,
                 decrementOther: counters[wrapIndex(idx + 1)].module.actions.decrement
               }),
-              onDelete: x => x // TODO: implement DeleteMe action
+              onDelete: [del, idx]
             }))
         },
         Settings() {
