@@ -5,39 +5,48 @@ import { WithDeleteButton } from './multi-counter-components.js'
 
 export default function MultiCounter(slice, { } = {}) {
 
-  const counters = []
-  let seq = -1
+  const modules = []
 
-  function insert(at, Module, type, props) {
-    const id = `m${++seq}`
-    const module = ns(child(id)).add(Module, 'module', props)
-
-    module.init.type = type
-    module.init.props = props
-    counters.splice(at, 0, { id, module })
-
-    return { [id]: module.init }
+  function isPositiveCounter({ positive } = {}) {
+    return positive !== undefined
   }
 
-  function addCounter(props) {
-    return props.positive === undefined
-      ? insert(counters.length, Counter, 'counter', props)
-      : insert(counters.length, PositiveCounter, 'positiveCounter', props)
+  function getModule(props) {
+    return isPositiveCounter(props) ? PositiveCounter : Counter
+  }
+
+  function add(slice, props) {
+    const seq = slice.seq + 1
+    const id = `x${seq}`
+    const module = getModule(props)(child(id), props)
+
+    modules.push(module)
+
+    return {
+      ...slice,
+      seq,
+      order: [...slice.order, { id, props }],
+      [id]: module.init[id]
+    }
+  }
+
+  function del(slice, idx) {
+    const { [slice.order[idx].id]: _, ...result } = slice
+    modules.splice(idx, 1)
+    return {
+      ...result,
+      order: slice.order.filter((_, i) => idx !== i)
+    }
   }
 
   const [multiCounter, child] = module(slice, {
+    init: {
+      seq: -1,
+      order: []
+    },
     actions: {
-      add(slice, props) {
-        return {
-          ...slice,
-          ...addCounter(props)
-        }
-      },
-      del(slice, idx) {
-        const { [counters[idx].id]: _, ...result } = slice
-        counters.splice(idx, 1)
-        return result
-      }
+      add,
+      del
     },
     views({ slice, actions: { del }, state }) {
       return {
@@ -45,27 +54,27 @@ export default function MultiCounter(slice, { } = {}) {
           return views().map((v, idx) => WithDeleteButton(
             {
               Module: v.IncDec({
-                incrementOther: counters[wrapIndex(idx + 1)].module.actions.increment,
-                decrementOther: counters[wrapIndex(idx + 1)].module.actions.decrement
+                incrementOther: modules[wrapIndex(idx + 1)].actions.increment,
+                decrementOther: modules[wrapIndex(idx + 1)].actions.decrement
               }),
               onDelete: [del, idx]
             }))
         },
         Settings() {
-          return views(positiveCounter).map(v => v.Settings())
+          return views(positiveCounters).map(v => v.Settings())
         }
       }
 
       function views(filter = _ => true) {
-        return counters.filter(filter).map(c => c.module.views(state))
+        return modules.filter(filter).map(m => m.views(state))
       }
 
       function wrapIndex(index) {
-        return index < 0 ? counters.length - 1 : index >= counters.length ? 0 : index
+        return index < 0 ? modules.length - 1 : index >= modules.length ? 0 : index
       }
 
-      function positiveCounter(module) {
-        return slice[module.id].type === 'positiveCounter'
+      function positiveCounters(_, idx) {
+        return isPositiveCounter(slice.order[idx].props)
       }
     }
   })
@@ -77,7 +86,8 @@ export default function MultiCounter(slice, { } = {}) {
       return multiCounter.views(state)
     },
     add(props) {
-      addCounter(props)
+      // too simplistic - slice cannot be 'child'; only string is supported this way
+      multiCounter.init[slice] = add(multiCounter.init[slice], props)
     }
   }
 }

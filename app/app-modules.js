@@ -24,8 +24,10 @@ addModule(MultiCounter, 'multiCounter')
 
 export const modules = all.map(m => m.module)
 export const indexes = all.reduce((acc, m, idx) => { acc[m.slice] = idx; return acc }, {})
-export const init = topLevel.reduce((acc, m) => ({ ...acc, ...m.init }), {})
 
 const multiCounter = modules[indexes.multiCounter]
 multiCounter.add({ name: 'First' })
 multiCounter.add({ name: 'Second', count: 5, positive: false })
+
+// must be evaluated only after ALL modules are created (including those added into MultiCounter)
+export const init = topLevel.reduce((acc, m) => ({ ...acc, ...m.init }), {})
