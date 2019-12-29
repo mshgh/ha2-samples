@@ -18,7 +18,7 @@ const navigation = Navigation('nav', {
     AppTitle(state.title),
     Page,
     Separator(),
-    ShowState({ state })
+    ShowState({ state, height: '64ex' })
   ),
   defaultPage: 'nav.home',
   Menu: (state, { links }) => Div(links.map(({ label, onclick }) => ButtonLink(label, onclick))),

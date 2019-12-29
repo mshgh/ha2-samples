@@ -4,9 +4,10 @@ const functionPlaceholder = '>>>FUNCTION-MARKER(){}<<<'
 
 const showState = state => ({ ...state, showState: !state.showState })
 const showFunctions = (_, value) => typeof value === 'function' ? functionPlaceholder : value
+const showScrollbar = height => height === undefined ? {} : { style: { height, overflow: 'auto' } }
 
-export const ShowState = ({ state, indent = 2 }) => h('pre', {}, h('code', {}, [
+export const ShowState = ({ state, height, indent = 2 }) => h('pre', {}, h('code', {}, [
   'State: ',
   h('span', { style: { cursor: 'pointer', 'border-bottom': '1px solid black' }, onclick: showState }, `${state.showState ? 'Hide' : 'Show'}`),
-  state.showState && h('div', {}, JSON.stringify(state, showFunctions, indent).split(`: "${functionPlaceholder}"`).join(': function () => {...}'))
+  state.showState && h('div', showScrollbar(height), JSON.stringify(state, showFunctions, indent).split(`: "${functionPlaceholder}"`).join(': function () => {...}'))
 ]))
