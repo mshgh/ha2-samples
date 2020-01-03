@@ -28,6 +28,8 @@ export const indexes = all.reduce((acc, m, idx) => { acc[m.slice] = idx; return 
 const multiCounter = modules[indexes.multiCounter]
 multiCounter.add({ name: 'First' })
 multiCounter.add({ name: 'Second', count: 5, positive: false })
+multiCounter.add({ name: 'Third' })
+multiCounter.del(0)
 
 // must be evaluated only after ALL modules are created (including those added into MultiCounter)
 export const init = topLevel.reduce((acc, m) => ({ ...acc, ...m.init }), {})
