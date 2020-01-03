@@ -19,7 +19,7 @@ as a module based on https://github.com/zaceno/hyperapp-map approach
   - support to delete dynamically added counters implemented
 - version 6pre5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/def0c3eabf0c2fddb7f0686c1d3bdf83d5a2f240/index.html)
   - structure of state adjusted to contain array defining order and sequence to assign unique ids
-- version 6pre5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/def0c3eabf0c2fddb7f0686c1d3bdf83d5a2f240/index.html)
+- version 6pre5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/3fa00098f8e62f2be162b4a0d7134679507c167c/index.html)
   - generic support for array of Modules moved to lib/modules.js
 
 ## version 5 [see](https://rawcdn.githack.com/mshgh/ha2-samples/counter-map-v5/index.html)
