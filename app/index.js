@@ -5,7 +5,7 @@ app({
   init: {
     ...init,
     addCounter: { name: '', count: 0, positive: false },
-    title: 'Counter + PositiveCoutner + Namespace + Navigation'
+    title: 'Counter + PositiveCoutner + Namespace + Navigation + Dynamically Added Counters'
   },
   view,
   node: document.body
