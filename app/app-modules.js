@@ -29,6 +29,7 @@ const multiCounter = modules[indexes.multiCounter]
 multiCounter.add({ name: 'First' })
 multiCounter.add({ name: 'Second', count: 5, positive: false })
 multiCounter.add({ name: 'Third' })
+multiCounter.add({ name: 'Fourth', count: 7, positive: true })
 multiCounter.del(0)
 
 // must be evaluated only after ALL modules are created (including those added into MultiCounter)

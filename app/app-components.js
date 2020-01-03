@@ -15,12 +15,20 @@ export function Counters({
   return Div(
     ...multiCounterViews.Counters(),
     Separator(),
-    aViews.IncDec({ title: 'Counter A', incrementOther: b.increment, decrementOther: b.decrement }),
-    bViews.IncDec({ title: 'Counter B', incrementOther: c.increment, decrementOther: c.decrement }),
-    cViews.IncDec({ title: 'Counter C', incrementOther: d.increment, decrementOther: d.decrement }),
-    dViews.IncDec({ title: 'Counter D', incrementOther: e.increment, decrementOther: e.decrement }),
-    eViews.IncDec({ title: 'Counter E', incrementOther: a.increment, decrementOther: a.decrement })
+    IncDec(aViews, 'Counter A', b),
+    IncDec(bViews, 'Counter B', c),
+    IncDec(cViews, 'Counter C', d),
+    IncDec(dViews, 'Counter D', e),
+    IncDec(eViews, 'Counter E', a)
   )
+
+  function IncDec(views, title, { increment, decrement }) {
+    return views.IncDec({
+      title,
+      incrementOther: increment, incrementOtherLabel: 'next',
+      decrementOther: decrement, decrementOtherLabel: 'next'
+    })
+  }
 }
 
 export function Settings({ [module.c]: cViews, [module.e]: eViews, [module.multiCounter]: multiCounterViews }) {
