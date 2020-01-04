@@ -20,7 +20,7 @@ addModule(Counter, 'b', { name: 'B', count: 3 })
 addModule(PositiveCounter, 'c', { name: 'C', count: 5 })
 addModule(Counter, 'd', { name: 'D', count: 7 }, counters)
 addModule(PositiveCounter, 'e', { name: 'E', count: 13, positive: true }, counters)
-addModule(MultiCounter, 'multiCounter')
+addModule(MultiCounter, 'multiCounter', {}, counters)
 
 export const modules = all.map(m => m.module)
 export const indexes = all.reduce((acc, m, idx) => { acc[m.slice] = idx; return acc }, {})
