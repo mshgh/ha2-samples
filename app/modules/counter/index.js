@@ -9,8 +9,8 @@ export default function Counter(slice, { name, count = 0 } = {}) {
     actions,
     views({ slice, actions: { increment, decrement } }) {
       return {
-        IncDec({ incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel } = {}) {
-          return IncDec({ name, count: slice, increment, decrement, incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel })
+        IncDec({ name: forceName, incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel } = {}) {
+          return IncDec({ name: (forceName || name), count: slice, increment, decrement, incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel })
         }
       }
     }
