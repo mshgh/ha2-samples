@@ -29,7 +29,6 @@ const { init, view, navigateTo } = Navigation('nav', {
     { name: 'nav.add-more', label: 'Add More', Page: AddMorePage }
   ]
 })
-
 const navigation = {
   Counters: navigateTo('nav.counters'),
   Settings: navigateTo('nav.settings'),

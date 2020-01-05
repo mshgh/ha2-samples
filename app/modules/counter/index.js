@@ -3,7 +3,6 @@ import * as actions from './counter-actions.js'
 import { IncDec } from './counter-components.js'
 
 export default function Counter(slice, { name, count = 0 } = {}) {
-
   const [counter] = module(slice, {
     init: count,
     actions,

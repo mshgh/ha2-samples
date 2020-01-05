@@ -22,7 +22,6 @@ export default function Navigation(slice, { MasterPage, defaultPage, Menu = () =
       }
     }
   )
-
   // TODO: hierarchical navigation menu support
   const links = menuItems.reduce((acc, { name, label, Page }) => {
     const navigate = [actions.navigate, name]

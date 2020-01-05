@@ -5,7 +5,6 @@ import Counter from '../counter/index.js'
 import { ON, OFF } from '../../components/helpers.js'
 
 export default function PositiveCounter(slice, { name, count = 0, positive = false } = {}) {
-
   const [{ init, views }, child] = module(slice, {
     init: {
       positive
@@ -26,7 +25,6 @@ export default function PositiveCounter(slice, { name, count = 0, positive = fal
       return !state.positive ? state : { ...state, counter: Math.max(0, state.counter) }
     }
   })
-
   const counter = Counter(child('counter'), { count })
 
   return {

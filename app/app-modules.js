@@ -4,8 +4,8 @@ import PositiveCounter from './modules/positive-counter/index.js'
 import MultiCounter from './modules/multi-counter/index.js'
 
 function addModule(Module, slice, props, ns) {
-
   const module = ns === undefined ? Module(slice, props) : ns.add(Module, slice, props)
+
   if (ns === undefined) topLevel.push(module)
   all.push({ slice, module })
 }
