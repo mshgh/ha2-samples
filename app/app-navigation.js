@@ -12,7 +12,7 @@ const CountersPage = state => Counters({ actions, views: views.map(v => v(state)
 const SettingsPage = state => Settings(views.map(v => v(state)))
 const AddMorePage = state => AddMoreForm({ addCounter: state.addCounter, add: actions[module.multiCounter].add })
 
-const { init, View, navigateTo } = Navigation('nav', {
+const { init, view, navigateTo } = Navigation('nav', {
   MasterPage: (state, { Menu, Page }) => Body(
     Menu,
     AppTitle(state.title),
@@ -37,7 +37,9 @@ const navigation = {
 }
 
 export default {
-  View,
+  view(state) {
+    return view(state, { navigation })
+  },
   init: {
     ...modulesInit,
     ...init

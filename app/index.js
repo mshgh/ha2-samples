@@ -7,6 +7,6 @@ app({
     addCounter: { name: '', count: 0, positive: false },
     title: 'Counter + PositiveCoutner + Namespace + Navigation + Dynamically Added Counters'
   },
-  view: navigation.View,
+  view: navigation.view,
   node: document.body
 })
