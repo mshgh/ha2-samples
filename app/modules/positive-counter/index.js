@@ -32,8 +32,6 @@ export default function PositiveCounter(slice, { name, count = 0, positive = fal
   return {
     init,
     actions: counter.actions,
-    views(state) {
-      return views(state)
-    }
+    views
   }
 }

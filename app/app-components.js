@@ -2,11 +2,11 @@ import { Div, TextLink, ButtonLink, Separator, FormTitle, InputText, InputCheckb
 import { indexes as module } from './app-modules.js'
 import * as addCounter from './app-actions-add-counter.js'
 
-export function WelcomeMessage({ navigateToCounters, navigateToSettings, navigateToAddMore }) {
+export function WelcomeMessage({ navigation }) {
   return Div(
-    'Welcome to our weird Counter App. You can use the top level navigation or jump directly into ', TextLink("Counters", navigateToCounters), ' page,',
-    ' adjust ', TextLink('Settings', navigateToSettings), ',',
-    ' or ', TextLink('Add more', navigateToAddMore), ' counters.'
+    'Welcome to our weird Counter App. You can use the top level navigation or jump directly into ', TextLink("Counters", navigation.Counters), ' page,',
+    ' adjust ', TextLink('Settings', navigation.Settings), ',',
+    ' or ', TextLink('Add more', navigation.AddMore), ' counters.'
   )
 }
 

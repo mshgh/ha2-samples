@@ -44,10 +44,8 @@ export default function Navigation(slice, { MasterPage, defaultPage, Menu = () =
     navigateTo(name) {
       return links.map[name].navigate
     },
-    View(props) {
-      return function (state) {
-        return navigation.views(state).View(props)
-      }
+    View(state, props) {
+      return navigation.views(state).View(props)
     }
   }
 }

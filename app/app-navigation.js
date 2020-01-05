@@ -7,12 +7,12 @@ import { modules, indexes as module, init as modulesInit } from './app-modules.j
 const actions = modules.map(m => m.actions)
 const views = modules.map(m => m.views)
 
-const WelcomePage = (_, { navigateToCounters, navigateToSettings, navigateToAddMore }) => WelcomeMessage({ navigateToCounters, navigateToSettings, navigateToAddMore })
+const WelcomePage = () => WelcomeMessage({ navigation })
 const CountersPage = state => Counters({ actions, views: views.map(v => v(state)) })
 const SettingsPage = state => Settings(views.map(v => v(state)))
 const AddMorePage = state => AddMoreForm({ addCounter: state.addCounter, add: actions[module.multiCounter].add })
 
-const navigation = Navigation('nav', {
+const { init, View, navigateTo } = Navigation('nav', {
   MasterPage: (state, { Menu, Page }) => Body(
     Menu,
     AppTitle(state.title),
@@ -30,13 +30,16 @@ const navigation = Navigation('nav', {
   ]
 })
 
-export const view = navigation.View({
-  navigateToCounters: navigation.navigateTo('nav.counters'),
-  navigateToSettings: navigation.navigateTo('nav.settings'),
-  navigateToAddMore: navigation.navigateTo('nav.add-more')
-})
-
-export const init = {
-  ...modulesInit,
-  ...navigation.init
+const navigation = {
+  Counters: navigateTo('nav.counters'),
+  Settings: navigateTo('nav.settings'),
+  AddMore: navigateTo('nav.add-more')
 }
+
+export default {
+  View,
+  init: {
+    ...modulesInit,
+    ...init
+  }
+} 
