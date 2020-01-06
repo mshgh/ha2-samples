@@ -1,7 +1,7 @@
 import { module } from '../../lib/modules.js'
 
 export default function Navigation(slice, { MasterPage, defaultPage, Menu = () => { }, menuItems = [] } = {}) {
-  const { init, actions, views: view } = module(slice,
+  const { init, actions, view } = module(slice,
     {
       init: {
         pageName: defaultPage
@@ -14,7 +14,7 @@ export default function Navigation(slice, { MasterPage, defaultPage, Menu = () =
           }
         }
       },
-      views({ slice, state }, props) {
+      view({ slice, state }, props) {
         return MasterPage(state, {
           Menu: Menu(state, { links: links.all }, props),
           Page: links.map[slice.pageName].Page(state, props)

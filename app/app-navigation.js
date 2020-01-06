@@ -5,7 +5,7 @@ import { WelcomeMessage, Counters, Settings, AddMoreForm } from './app-component
 import { modules, indexes as module, init as modulesInit } from './app-modules.js'
 
 const actions = modules.map(m => m.actions)
-const views = modules.map(m => m.views)
+const views = modules.map(m => m.view)
 
 const WelcomePage = () => WelcomeMessage({ navigation })
 const CountersPage = state => Counters({ actions, views: views.map(v => v(state)) })

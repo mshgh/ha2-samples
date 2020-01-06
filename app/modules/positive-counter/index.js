@@ -5,15 +5,15 @@ import Counter from '../counter/index.js'
 import { ON, OFF } from '../../components/helpers.js'
 
 export default function PositiveCounter(slice, { name, count = 0, positive = false } = {}) {
-  const { init, views, subModule } = module(slice, {
+  const { init, view, subModule } = module(slice, {
     init: {
       positive
     },
     actions,
-    views({ slice, actions: { toggle }, state }) {
+    view({ slice, actions: { toggle }, state }) {
       return {
         IncDec({ incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel } = {}) {
-          const { IncDec } = counter.views(state)
+          const { IncDec } = counter.view(state)
           return IncDec({ name: [`${name} (positive `, slice.positive ? ON() : OFF(), ')'], incrementOther, incrementOtherLabel, decrementOther, decrementOtherLabel })
         },
         Settings() {
@@ -30,6 +30,6 @@ export default function PositiveCounter(slice, { name, count = 0, positive = fal
   return {
     init,
     actions: counter.actions,
-    views
+    view
   }
 }

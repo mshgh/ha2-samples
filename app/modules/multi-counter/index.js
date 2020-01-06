@@ -10,12 +10,12 @@ export default function MultiCounter(slice, { } = {}) {
 
   return {
     init, actions, add, del,
-    views(state) {
+    view(state) {
       return {
         Counters() {
           return Counters({
             counters: all().map(c => ({
-              IncDec: c.views(state).IncDec,
+              IncDec: c.view(state).IncDec,
               increment: c.actions.increment,
               decrement: c.actions.decrement
             })),
@@ -25,7 +25,7 @@ export default function MultiCounter(slice, { } = {}) {
         Settings() {
           return Settings({
             counters: all(isPositiveCounter).map(c => ({
-              Settings: c.views(state).Settings
+              Settings: c.view(state).Settings
             }))
           })
         }
