@@ -55,20 +55,20 @@ export const build = (operations, { pushFocus, pushNamespace, buildDi } = {}) =>
   }
 
   const handlers = {
-    ['Context']: ({ pushFocus, pushNamespace, popFocus, popNamespace }) => {
+    Context: ({ pushFocus, pushNamespace, popFocus, popNamespace }) => {
       if (popNamespace) popStacks(popNamespace, 1, views, actions, namespace)
       if (pushNamespace) Array.isArray(pushNamespace) ? pushNamespace.map(pushViewsActions) : pushViewsActions(pushNamespace)
       if (popFocus) popStacks(popFocus, 0, focuses)
       if (pushFocus) Array.isArray(pushFocus) ? focuses.push(...pushFocus) : focuses.push(pushFocus)
     },
 
-    ['Action']: (action, { name, ...props } = {}) => setCurrent(actions, getName(action.name, name), focusAction([...focuses], action, props)),
-    ['Actions']: (actions, { name, ...props } = {}) => actions.forEach(action => handlers['Action'](action, props)),
+    Action: (action, { name, ...props } = {}) => setCurrent(actions, getName(action.name, name), focusAction([...focuses], action, props)),
+    Actions: (actions, { name, ...props } = {}) => actions.forEach(action => handlers['Action'](action, props)),
 
-    ['View']: (view, { name, ...props } = {}) => setCurrent(views, getName(view.name, name), focusView([...focuses], view, props)),
-    ['MainView']: (view, props) => mainView = focusView([...focuses], view, props),
+    View: (view, { name, ...props } = {}) => setCurrent(views, getName(view.name, name), focusView([...focuses], view, props)),
+    MainView: (view, props, viewProps) => mainView = [focusView([...focuses], view, props), viewProps],
 
-    ['Include']: ops => ops.forEach(([op, arg1, arg2]) => processOperation(op, arg2, arg1, arg2))
+    Include: ops => ops.forEach(([op, ...args]) => processOperation(op, args?.[1], ...args)) // 2nd argument contains Context
   }
 
   const processOperation = (operation, { pushFocus, pushNamespace } = {}, ...args) => {
@@ -82,9 +82,9 @@ export const build = (operations, { pushFocus, pushNamespace, buildDi } = {}) =>
   }
 
   processOperation('Include', { pushFocus, pushNamespace }, operations)
-  if (typeof mainView !== 'function') throw new Error(`The main view is not defined, please use 'MainView' to define it`)
+  if (typeof mainView?.[0] !== 'function') throw new Error(`The main view is not defined, please use 'MainView' to define it`)
   return {
-    view: state => (currentState = state, mainView()),
+    view: state => (currentState = state, mainView[0](mainView[1])),
     actions: actions.at(-1)[namespace.at(-1)]
   }
 }

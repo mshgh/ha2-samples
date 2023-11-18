@@ -1,4 +1,7 @@
 export const view = (_state, {
-  counter,
+  counter, showState, body,
   ...props
-}) => counter(props)
+}) => body([
+  counter(props),
+  showState()
+])

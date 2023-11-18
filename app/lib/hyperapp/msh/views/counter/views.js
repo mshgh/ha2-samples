@@ -2,16 +2,16 @@ export const view = (
   state,
   {
     // props
-    label, bgcolor,
+    label, background,
     // actions
     Inc, Dec,
     // html
     html: { div, button }
   },
   _children
-) => div({ style: { bgcolor } }, [
+) => div({ style: { background } }, [
   label,
-  button({ onclick: Inc }, '+'),
+  button({ onclick: Dec }, '-'),
   state,
-  button({ onclick: Dec }, '-')
+  button({ onclick: Inc }, '+')
 ])
