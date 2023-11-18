@@ -1,0 +1,1 @@
+export const Init = ({ InitCounter }) => (state, { count }) => InitCounter(state, count)
