@@ -7,8 +7,8 @@ const InitDi = actions => ({ InitCounter: actions.counter.Init, InitShowState: a
 const viewDi = ({ views: { counter, showState }, html: { body } }) => ({ counter, showState, body })
 
 export const simpleCounterSetup = [
-  ['Include', showStateSetup, { pushNamespace: 'showState' }],
-  ['Include', counterSetup, { pushNamespace: 'counter', pushFocus: 'count' }],
+  ['Include', showStateSetup, { namespace: 'showState' }],
+  ['Include', counterSetup, { namespace: 'counter', focus: 'count' }],
   ['Action', Init, { curriedDi: true, di: InitDi }],
   ['MainView', view, { di: viewDi }, { label: 'Count: ', background: 'lightblue' }]
 ]

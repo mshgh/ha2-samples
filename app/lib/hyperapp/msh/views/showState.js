@@ -17,6 +17,6 @@ const view = (
 const viewDi = ({ actions: { Toggle }, html }) => ({ Toggle, html })
 
 export const showStateSetup = [
-  ['Actions', [Init, Toggle], { pushFocus: 'showState' }],
+  ['Actions', [Init, Toggle], { focus: 'showState' }],
   ['View', view, { name: '', curriedDi: true, di: viewDi }]
 ]
