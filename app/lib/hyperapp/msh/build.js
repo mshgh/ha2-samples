@@ -1,82 +1,84 @@
 export const build = (operations, { focus, namespace, buildDi } = {}) => {
   let mainView, currentState
-  const focuses = [], ROOT_NS = 'root', namespaces = [ROOT_NS], views = [{ [ROOT_NS]: {} }], actions = [{ [ROOT_NS]: {} }]
+  const focuses = [], ROOT_NS = 'root', namespaces = [{ key: ROOT_NS, views: { [ROOT_NS]: {} }, actions: { [ROOT_NS]: {} } }]
 
-  const isA = a => Array.isArray(a), isF = f => typeof f === 'function'
-  const getPropsKey = (focus, props) => {
-    const key = props.reduce((key, props) => !key ? props?.[focus] : key, undefined)
-    if (typeof key === 'undefined') throw new Error(`Key ${focus} not found in props`)
+  const isA = a => Array.isArray(a), isF = f => typeof f === 'function', isO = o => o?.constructor === Object
+  const getIndirectKey = (focus, props) => {
+    const key = props.reduce((key, props) => typeof key === 'undefined' ? props?.[focus] : key, undefined)
+    if (typeof key === 'undefined') throw new Error(`Property '${focus}' not found in props`)
     return key
   }
-  const getKey = (focus, ...props) => focus[0] === '@' ? getPropsKey(focus.slice(1), props) : focus
+  const getKey = (focus, ...props) => focus[0] === '@' ? getIndirectKey(focus.slice(1), props) : focus
   const getName = (fnName, name) => typeof name === 'undefined' ? fnName : name
-  const setCurrent = (stack, name, value) => !name ? stack[0][namespaces[0]] = value : stack[0][namespaces[0]][name] = value
-  const pushViewsActions = name => {
-    [views, actions].forEach(stack => {
-      if (!stack[0][namespaces[0]][name]) setCurrent(stack, name, {})
-      stack.unshift(stack[0][namespaces[0]])
-    })
-    namespaces.unshift(name)
-  }
-  const popStacks = (count, keep, ...stacks) => stacks.forEach(stack => {
-    if (count > (stack.length - keep)) throw new Error(`Cannot pop '${count}' item(s) from stack with depth '${stack.length} and keep '${keep}' item(s)`)
-    stack.splice(0, count)
-  })
+  const setCurrent = (stack, name, value, key = namespaces[0].key) => !name ? stack[key] = value : stack[key][name] = value
+  const deepClone = obj => Object.entries(obj).reduce((acc, [k, v]) => (acc[k] = isO(v) ? deepClone(v) : v, acc), {})
 
-  const focusAction = (actionFocus, action, { curriedDi, di } = {}) => {
-    const inject = di && di(actions[0][namespaces[0]])
+  const captureViewProps = Symbol()
+  const focusAction = (action, { curriedDi, di } = {}) => {
+    const focus = [...focuses], inject = di && deepClone(di(namespaces[0].actions[namespaces[0].key]))
     if (curriedDi) action = action(inject)
     return (state, props) => {
-      if (inject && !curriedDi && props?.constructor !== Object) throw new Error(`Cannot inject dependencies into scalar props`)
-      const subStates = actionFocus.reduce((acc, focus) => {
-        acc.unshift(!acc.length ? [state || {}, focus] : [acc[0][0][acc[0][1]] || (focus[0] === '@' ? [] : {}), getKey(focus, props)])
-        return acc
-      }, [])
-      const subState = !subStates.length ? state : subStates[0][0][subStates[0][1]]
-      const result = action(subState, inject && !curriedDi ? { ...inject, ...props } : props)
-      const newSubState = isA(result) ? result[0] : result
-      if (isF(newSubState)) return result
-      const newState = newSubState === subState ? state : subStates.reduce((newState, [parent, key]) => {
-        return !isA(parent) ? { ...parent, [key]: newState }
-          : parent.map((item, index) => index === key ? newState : item) // TODO: is there better way how to update array element?
-      }, newSubState)
-      return isA(result) ? (result[0] = newState, result) : newState
+      let viewProps
+      const focusedAction = (state, props) => {
+        if (inject && !curriedDi && !isO(props)) throw new Error(`Cannot inject dependencies into scalar props`)
+        const subStates = focus.reduce((acc, focus) => {
+          acc.unshift(!acc.length ? [state || {}, focus] : [acc[0][0][acc[0][1]] || {}, getKey(focus, props, viewProps)])
+          return acc
+        }, [])
+        const subState = !subStates.length ? state : subStates[0][0][subStates[0][1]]
+        const result = action(subState, inject && !curriedDi ? { ...inject, ...props } : props)
+        const newSubState = isA(result) ? result[0] : result
+        if (isF(newSubState)) return result
+        const newState = newSubState === subState ? state : subStates.reduce((newState, [parent, key]) => {
+          return !isA(parent) ? { ...parent, [key]: newState }
+            : parent.map((item, index) => index === key ? newState : item) // TODO: is there better way how to update array element?
+        }, newSubState)
+        return isA(result) ? (result[0] = newState, result) : newState
+      }
+      return state === captureViewProps ? (viewProps = props, focusedAction) : focusedAction(state, props)
     }
   }
 
-  const focusView = (viewFocus, view, { curriedDi, di, subState } = {}) => {
-    const inject = di && di({ ...buildDi, views: views[0][namespaces[0]], actions: actions[0][namespaces[0]] })
-    if (curriedDi) view = view(inject)
+  const focusView = (view, { di, subState } = {}) => {
+    const focus = [...focuses], [views, actions] = ['views', 'actions'].map(stack => di && deepClone(namespaces[0][stack][namespaces[0].key]))
     return (props, children) => {
-      const state = viewFocus.reduce((acc, focus) => acc?.[getKey(focus, props)], currentState)
-      return view(!subState ? state : subState(state), inject && !curriedDi ? { ...inject, ...props } : props, children)
+      const setViewProps = (obj, callback = (acc, [key, value]) => (acc[key] = setViewProps(value), acc)) =>
+        typeof obj === 'function' ? obj(captureViewProps, props) : Object.entries(obj).reduce(callback, {})
+      const inject = di && di({ ...buildDi, views, actions: actions && setViewProps(actions) })
+      const state = focus.reduce((acc, focus) => acc?.[getKey(focus, props)], currentState)
+      return view(!subState ? state : subState(state), inject ? { ...inject, ...props } : props, children)
     }
   }
 
+  const focuser = (stack, focus, fn, { name, ...props } = {}) => setCurrent(stack, getName(fn.name, name), focus(fn, props))
   const handlers = {
-    Action: (action, { name, ...props } = {}) => setCurrent(actions, getName(action.name, name), focusAction([...focuses], action, props)),
-    Actions: (actions, { name, ...props } = {}) => actions.forEach(action => handlers['Action'](action, props)),
-    View: (view, { name, ...props } = {}) => setCurrent(views, getName(view.name, name), focusView([...focuses], view, props)),
-    MainView: (view, props, viewProps) => mainView = [focusView([...focuses], view, props), viewProps],
-    Push: ({ namespace, focus }, ops) => processOperation('Include', { focus, namespace }, ops),
-    Include: ops => ops.forEach(([op, ...args]) => processOperation(op, args?.[1], ...args)) // 2nd argument contains Context
+    Action: (action, props) => focuser(namespaces[0].actions, focusAction, action, props),
+    Actions: (actions, { name, ...props } = {}) => actions.forEach(action => handlers.Action(action, props)),
+    View: (view, props) => focuser(namespaces[0].views, focusView, view, props),
+    MainView: (view, props, viewProps) => mainView = [focusView(view, props), viewProps],
+    Push: ({ namespace, focus }, ops) => processOperation(handlers.Include, { focus, namespace }, ops),
+    Include: ops => ops.forEach(([op, ...args]) => typeof op === 'string' && processOperation(handlers[op] || op, args?.[1], ...args))
   }
 
-  const processOperation = (operation, { focus, namespace } = {}, ...args) => {
-    const handler = handlers[operation], popCount = push => push && (isA(push) ? push.length : 1)
-    if (!isF(handler)) throw new Error(`Unrecognized operation: ${operation}`)
+  const pushNamespace = namespace => {
+    const { key, actions, views } = namespaces[0]
+    for (const stack of [actions, views]) stack[key][namespace] || setCurrent(stack, namespace, {})
+    namespaces.unshift({ key: namespace, views: views[key], actions: actions[key] })
+  }
 
-    if (namespace) isA(namespace) ? namespace.map(pushViewsActions) : pushViewsActions(namespace)
+  const processOperation = (handler, { focus, namespace } = {}, ...args) => {
+    if (!isF(handler)) throw new Error(`Unrecognized operation: ${handler}`)
+    if (namespace) isA(namespace) ? namespace.map(pushNamespace) : pushNamespace(namespace)
     if (focus) isA(focus) ? focuses.push(...focus) : focuses.push(focus)
     handler(...args)
-    if (namespace) popStacks(popCount(namespace), 1, views, actions, namespaces)
-    if (focus) popStacks(popCount(focus), 0, focuses)
+    if (namespace) namespaces.splice(0, isA(namespace) ? namespace.length : 1)
+    if (focus) focuses.splice(0, isA(focus) ? focus.length : 1)
   }
 
-  processOperation('Include', { focus, namespace }, operations)
+  processOperation(handlers.Include, { focus, namespace }, operations)
   if (!isF(mainView?.[0])) throw new Error(`The main view is not defined, please use 'MainView' to define it`)
   return {
     view: state => (currentState = state, mainView[0](mainView[1])),
-    actions: actions.at(-1)[namespaces.at(-1)]
+    actions: namespaces.at(-1).actions[namespaces.at(-1).key]
   }
 }

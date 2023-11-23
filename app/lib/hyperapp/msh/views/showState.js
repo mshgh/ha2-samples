@@ -3,12 +3,7 @@ const Init = (_, show) => show
 const Toggle = show => !show
 
 // views
-const view = (
-  {
-    Toggle,
-    html: { pre, div }
-  }
-) => ({ showState, ...state } = {}) => pre([
+const view = ({ showState, ...state }, { Toggle, html: { pre, div } }) => pre([
   div({ onclick: Toggle }, showState ? 'Hide state' : 'Show state'),
   showState && JSON.stringify(state, null, 2)
 ])
@@ -18,5 +13,5 @@ const viewDi = ({ actions: { Toggle }, html }) => ({ Toggle, html })
 
 export const showStateSetup = [
   ['Actions', [Init, Toggle], { focus: 'showState' }],
-  ['View', view, { name: '', curriedDi: true, di: viewDi }]
+  ['View', view, { name: '', di: viewDi }]
 ]

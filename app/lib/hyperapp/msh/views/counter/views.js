@@ -11,7 +11,7 @@ export const view = (
   _children
 ) => div({ style: { background } }, [
   label,
-  button({ onclick: Dec }, '-'),
+  button({ onclick: [Dec] }, '-'),
   state,
-  button({ onclick: Inc }, '+')
+  button({ onclick: [Inc] }, '+')
 ])
