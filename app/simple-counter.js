@@ -1,10 +1,13 @@
 import { app } from './lib/hyperapp/v2.0.22.min.js'
-import { build } from './lib/hyperapp/msh/build.js' // .min
+import { haBuild } from './lib/hyperapp/msh/build.js'
 import { html } from './lib/hyperapp/msh/html.js'
-import { simpleCounterSetup } from './simple-counter/index.js'
+import { simpleCounterSetup } from './views/simple-counter.js'
+
+const showState = true
+const count = 3
 
 const main = async node => {
-  const { view, actions: { Init } } = build(simpleCounterSetup, { buildDi: { html } })
-  app({ node, view, init: Init({}, { count: 3, showState: true }) })
+  const { view, actions: { Init } } = haBuild(simpleCounterSetup, { buildDi: { html } })
+  app({ node, view, init: Init({ foo: 'bar' }, { count, showState }) })
 }
 main(document.body).catch(console.log)

@@ -1,4 +1,4 @@
-export const build = (operations, { focus, namespace, buildDi } = {}) => {
+export const haBuild = (operations, { focus, namespace, buildDi } = {}) => {
   let mainView, currentState
   const focuses = [], ROOT_NS = 'root', namespaces = [{ key: ROOT_NS, views: { [ROOT_NS]: {} }, actions: { [ROOT_NS]: {} } }]
 
@@ -56,7 +56,7 @@ export const build = (operations, { focus, namespace, buildDi } = {}) => {
     Actions: (actions, { name, ...props } = {}) => actions.forEach(action => handlers.Action(action, props)),
     View: (view, props) => focuser(namespaces[0].views, focusView, view, props),
     MainView: (view, props, viewProps) => mainView = [focusView(view, props), viewProps],
-    Push: ({ namespace, focus }, ops) => processOperation(handlers.Include, { focus, namespace }, ops),
+    Scope: ({ namespace, focus }, ops) => processOperation(handlers.Include, { focus, namespace }, ops),
     Include: ops => ops.forEach(([op, ...args]) => typeof op === 'string' && processOperation(handlers[op] || op, args?.[1], ...args))
   }
 
