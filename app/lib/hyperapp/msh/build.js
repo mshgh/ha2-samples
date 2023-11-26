@@ -1,4 +1,4 @@
-export const haBuild = (operations, { focus, namespace, buildDi } = {}) => {
+export const haBuild = (operations, { focus, namespace } = {}) => {
   let mainView, currentState
   const focuses = [], ROOT_NS = 'root', namespaces = [{ key: ROOT_NS, views: { [ROOT_NS]: {} }, actions: { [ROOT_NS]: {} } }]
 
@@ -44,7 +44,7 @@ export const haBuild = (operations, { focus, namespace, buildDi } = {}) => {
     return (props, children) => {
       const setViewProps = (obj, callback = (acc, [key, value]) => (acc[key] = setViewProps(value), acc)) =>
         typeof obj === 'function' ? obj(captureViewProps, props) : Object.entries(obj).reduce(callback, {})
-      const inject = di && di({ ...buildDi, views, actions: actions && setViewProps(actions) })
+      const inject = di && di({ views, actions: actions && setViewProps(actions) })
       const state = focus.reduce((acc, focus) => acc?.[getKey(focus, props)], currentState)
       return view(!subState ? state : subState(state), inject ? { ...inject, ...props } : props, children)
     }

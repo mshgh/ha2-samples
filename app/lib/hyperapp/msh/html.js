@@ -17,8 +17,8 @@ const targetArgs = args => args.length === 0 ? [{}] // no parameters at all
 const cacheElement = (target, tag, cached = cache[tag]) => cached ? cached
   : cache[tag] = (...args) => target(tag, ...targetArgs(args))
 
+// for custom elements with cammel case generated name is "dashed" e.g. myElement to my-element
+const toElement = (target, property) => cacheElement(target, property.replace(/([A-Z])/g, c => '-' + c.toLowerCase()))
 
-export const html = new Proxy(h, {
-  // for custom elements with cammel case generated name is "dashed" e.g. myElement to my-element
-  get: (target, property) => cacheElement(target, property.replace(/([A-Z])/g, c => '-' + c.toLowerCase()))
-}) 
+export const html = new Proxy(h, { get: toElement })
+export const toHtml = (...args) => args.flat().reduce((acc, name) => (name ? (acc[name] = toElement(h, name), acc) : acc), {})

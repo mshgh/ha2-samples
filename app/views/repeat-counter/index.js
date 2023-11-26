@@ -1,3 +1,4 @@
+import { toHtml } from '../../lib/hyperapp/msh/html.js'
 import { showStateSetup } from '../../lib/hyperapp/msh/views/showState.js'
 import { counterSetup } from '../../lib/hyperapp/msh/views/counter.js'
 import { repeaterSetup } from '../../lib/hyperapp/msh/views/repeater.js'
@@ -11,26 +12,29 @@ const Init = ({ InitCounters, InitShowState }) => (state, { counters, showState 
 )
 
 // views
+const h = toHtml('body', 'button')
 const view = ({ counters }, {
   background,
-  counter, showState,
-  html: { body, button }
-}) => body([
-  counters.map(({ label, count }, index) => counter.view({ label, count, background, index })),
-  button({ onclick: [counter.Insert, { index: 2, label: 'Foo', count: 15 }] }, 'Add'),
-  showState()
+  counter, showState
+}) => h.body([
+  counters.map(({ label }, index) => [
+    counter.view({ label, background, index }),
+    h.button({ onclick: [counter.Delete, index] }, 'Del'),
+    h.button({ onclick: [counter.MoveUp, index] }, 'Up'),
+    h.button({ onclick: [counter.MoveDown, index] }, 'Down')
+  ]),
+  h.button({ onclick: [counter.Insert, { index: 2, label: 'Foo', count: 15 }] }, 'Add'),
+  showState.view()
 ])
 
 // build
-const InitDi = actions => ({ InitCounters: actions.counters.Init, InitShowState: actions.showState.Init })
+const InitDi = ({ counters, showState }) => ({ InitCounters: counters.Init, InitShowState: showState.Init })
 const viewDi = ({
   views: { counters, showState },
   actions: { counters: { InsertItem, DeleteItem, MoveItemUp, MoveItemDown } },
-  html: { body, button }
 }) => ({
-  showState,
+  showState: { view: showState },
   counter: { view: counters.item, Insert: InsertItem, Delete: DeleteItem, MoveUp: MoveItemUp, MoveDown: MoveItemDown },
-  html: { body, button }
 })
 
 export const repeatCounterSetup = [
